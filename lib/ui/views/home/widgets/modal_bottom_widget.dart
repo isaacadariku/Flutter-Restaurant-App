@@ -12,7 +12,9 @@ class AddTaskScreen extends StatefulWidget {
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   int height = 10;
-  bool check = false;
+  bool check;
+
+  bool checking() => check = !check;
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +43,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
               _headerText('Applied Filter', Alignment.topLeft),
               SizedBox(height: 40.h),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _appliedFiltersContainers(),
-                  ]),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Wrap(spacing: 20.w, children: <Widget>[
+                  _appliedFiltersContainers('Vegetarian'),
+                  _appliedFiltersContainers('Taiwanese'),
+                  _appliedFiltersContainers('<10km'),
+                  _appliedFiltersContainers('<10km'),
+                ]),
+              ),
               SizedBox(height: 20.h),
               Divider(thickness: 1.5, color: Color(0xFfECECEC)),
               SizedBox(height: 40.h),
@@ -56,16 +62,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 child: Wrap(
                   spacing: 20.w,
                   children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          // TODO: Switch state when check
-                          setState(() {
-                            check = !false;
-                          });
-                        },
-                        child: _vendorTypeContainers('Vegetarian', check)),
-                    _vendorTypeContainers('Stores & More', false),
-                    _vendorTypeContainers('Vegetarian Friendly', false),
+                    _vendorTypeContainers('Vegetarian', check),
+                    _vendorTypeContainers('Stores & More', check),
+                    _vendorTypeContainers('Vegetarian Friendly', check),
                   ],
                 ),
               ),
@@ -150,29 +149,39 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Container(
       child: Row(
         children: <Widget>[
-          press
-              ? CircleAvatar(
-                  radius: 50.w,
-                  backgroundColor: Color(0xFF83D32F),
-                  child: Icon(
-                    Icons.check,
-                    size: 80.w,
-                    color: Colors.white,
-                  ),
-                )
-              : CircleAvatar(
-                  radius: 50.w,
-                  backgroundColor: Color(0xFF83D32F),
-                  child: CircleAvatar(
-                    radius: 45.w,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.add,
-                      size: 80.w,
-                      color: Color(0xFF83D32F),
+          GestureDetector(
+            onTap: () {
+              // TODO: Switch state when check
+              setState(() {
+                checking();
+              });
+            },
+            child: Container(
+              child: press
+                  ? CircleAvatar(
+                      radius: 50.w,
+                      backgroundColor: Color(0xFF83D32F),
+                      child: Icon(
+                        Icons.check,
+                        size: 80.w,
+                        color: Colors.white,
+                      ),
+                    )
+                  : CircleAvatar(
+                      radius: 50.w,
+                      backgroundColor: Color(0xFF83D32F),
+                      child: CircleAvatar(
+                        radius: 45.w,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.add,
+                          size: 80.w,
+                          color: Color(0xFF83D32F),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+            ),
+          ),
           SizedBox(width: 20.w),
           Text(
             '$text',
@@ -189,19 +198,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
-  Widget _appliedFiltersContainers() {
+  Widget _appliedFiltersContainers(String text) {
     return Container(
       height: 120.h,
-      padding: EdgeInsets.all(25.w),
+      padding: EdgeInsets.all(30.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(60.w),
         color: Color(0xFF83D32F).withOpacity(0.3),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Taiwanese',
+            '$text',
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
