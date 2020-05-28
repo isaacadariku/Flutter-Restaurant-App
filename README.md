@@ -15,3 +15,4 @@ A non-profit vegan society app that show all vegan / vegetarian friendly restaur
 4. Show “Platform specific widgets” for things like loading indicator, dialog popup, action sheets. (Using Flutter platform widget package)
 
 5. Font size will scale according to the device's accessibility setting “font size”.
+# Flutter-Restaurant-App
