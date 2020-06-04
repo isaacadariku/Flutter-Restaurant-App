@@ -2,11 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:veggie_go_malaysia/constants/colors.dart';
-import 'package:veggie_go_malaysia/datamodels/country.dart';
-import 'package:stacked_hooks/stacked_hooks.dart';
-import 'package:veggie_go_malaysia/ui/views/home/widgets/modal_bottom_widget.dart';
-
-import '../home_viewmodel.dart';
 
 class LocationSelector extends StatelessWidget {
   @override
@@ -38,18 +33,6 @@ class LocationSelector extends StatelessWidget {
               ),
               onTap: () {
                 // TODO: switch to geolocation
-
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddTaskScreen(),
-                    ),
-                  ),
-                );
               },
             ),
           ),
@@ -57,30 +40,4 @@ class LocationSelector extends StatelessWidget {
       ),
     );
   }
-}
-
-class FlagSelector extends HookViewModelWidget<HomeViewModel> {
-  FlagSelector({Key key}) : super(key: key, reactive: false);
-
-  //TODO: write widget test
-
-  @override
-  Widget buildViewModelWidget(BuildContext context, HomeViewModel model) =>
-      Container(
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<Country>(
-            isExpanded: true,
-            value: model.selectedCountry,
-            items: Country.country.map((country) {
-              return DropdownMenuItem<Country>(
-                value: country,
-                child: Container(height: 100.h, child: country.countryImage),
-              );
-            }).toList(),
-            onChanged: (value) {
-              model.changeCountry(value);
-            },
-          ),
-        ),
-      );
 }

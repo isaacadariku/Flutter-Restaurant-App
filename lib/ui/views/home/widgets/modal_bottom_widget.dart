@@ -1,28 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stacked_hooks/stacked_hooks.dart';
 import 'package:veggie_go_malaysia/constants/colors.dart';
+import '../home_viewmodel.dart';
 
-//class ModalBottomWidget extends StatelessWidget {
+// showModalBottomSheet(
+//       context: context,
+//       isScrollControlled: true,
+//       builder: (context) => SingleChildScrollView(
+//         child: Container(
+//           padding:
+//           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+//           child:
 
-class AddTaskScreen extends StatefulWidget {
-  @override
-  _AddTaskScreenState createState() => _AddTaskScreenState();
-}
+class ModalBottomWidget extends HookViewModelWidget<HomeViewModel> {
+  ModalBottomWidget({Key key}) : super(key: key, reactive: false);
 
-class _AddTaskScreenState extends State<AddTaskScreen> {
+  // TODO: write widget test
+
   int height = 10;
-  bool check;
-
-  bool checking() => check = !check;
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildViewModelWidget(BuildContext context, HomeViewModel viewModel) {
     return Container(
       height: 1520.h,
       color: Color(0xff757575),
       child: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(50.h),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -31,7 +36,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(40.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -45,26 +50,25 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               SizedBox(height: 40.h),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Wrap(spacing: 20.w, children: <Widget>[
+                child: Wrap(spacing: 30.w, children: <Widget>[
                   _appliedFiltersContainers('Vegetarian'),
                   _appliedFiltersContainers('Taiwanese'),
-                  _appliedFiltersContainers('<10km'),
                   _appliedFiltersContainers('<10km'),
                 ]),
               ),
               SizedBox(height: 20.h),
-              Divider(thickness: 1.5, color: Color(0xFfECECEC)),
+              Divider(thickness: 1.5, color: Color(0xFFECECEC)),
               SizedBox(height: 40.h),
               _headerText('Vendor Type', Alignment.topLeft),
               SizedBox(height: 40.h),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
-                  spacing: 20.w,
+                  spacing: 30.w,
                   children: <Widget>[
-                    _vendorTypeContainers('Vegetarian', check),
-                    _vendorTypeContainers('Stores & More', check),
-                    _vendorTypeContainers('Vegetarian Friendly', check),
+                    _checkedvendorTypeContainers('Vegetarian'),
+                    _uncheckedvendorTypeContainers('Stores & More'),
+                    _uncheckedvendorTypeContainers('Vegetarian Friendly'),
                   ],
                 ),
               ),
@@ -75,37 +79,39 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               SizedBox(height: 80.h),
               _slider(context),
               SizedBox(height: 60.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Open now',
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.0,
-                      color: Color(0xFF000000),
-                    ),
-                  ),
-                  Switch.adaptive(
-                    value: true,
-                    activeColor: ThemeColors.kActiveColor,
-                    activeTrackColor: ThemeColors.kActiveTrackColor,
-                    inactiveThumbColor: ThemeColors.kInactiveColor,
-                    inactiveTrackColor: ThemeColors.kInactiveColor,
-                    onChanged: (bool value) {
-                      setState(() {
-                        value = !value;
-                      });
-                    },
-                  ),
-                ],
-              ),
+              _openNowRow(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _openNowRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          'Open now',
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 16.0,
+            color: Color(0xFF000000),
+          ),
+        ),
+        Switch.adaptive(
+          value: true,
+          activeColor: ThemeColors.kActiveColor,
+          activeTrackColor: ThemeColors.kActiveTrackColor,
+          inactiveThumbColor: ThemeColors.kInactiveColor,
+          inactiveTrackColor: ThemeColors.kInactiveColor,
+          onChanged: (bool value) {
+            // TODO: Get the state and set Functionality
+          },
+        ),
+      ],
     );
   }
 
@@ -136,50 +142,70 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         divisions: 10,
         onChanged: (double newValue) {
           // TODO: Get the state and set Functionality
-          setState(() {
-            height = newValue.round();
-          });
         },
         label: '$height',
       ),
     );
   }
 
-  Widget _vendorTypeContainers(String text, bool press) {
+  Widget _checkedvendorTypeContainers(String text) {
     return Container(
       child: Row(
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              // TODO: Switch state when check
-              setState(() {
-                checking();
-              });
+              // TODO:
             },
             child: Container(
-              child: press
-                  ? CircleAvatar(
-                      radius: 50.w,
-                      backgroundColor: Color(0xFF83D32F),
-                      child: Icon(
-                        Icons.check,
-                        size: 80.w,
-                        color: Colors.white,
-                      ),
-                    )
-                  : CircleAvatar(
-                      radius: 50.w,
-                      backgroundColor: Color(0xFF83D32F),
-                      child: CircleAvatar(
-                        radius: 45.w,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.add,
-                          size: 80.w,
-                          color: Color(0xFF83D32F),
-                        ),
-                      ),
-                    ),
+              child: CircleAvatar(
+                radius: 50.w,
+                backgroundColor: Color(0xFF83D32F),
+                child: Icon(
+                  Icons.check,
+                  size: 80.w,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 20.w),
+          Text(
+            '$text',
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+              color: Color(0xFF000000),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _uncheckedvendorTypeContainers(String text) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              // TODO:
+            },
+            child: Container(
+              child: CircleAvatar(
+                radius: 50.w,
+                backgroundColor: Color(0xFF83D32F),
+                child: CircleAvatar(
+                  radius: 45.w,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.add,
+                    size: 80.w,
+                    color: Color(0xFF83D32F),
+                  ),
+                ),
+              ),
             ),
           ),
           SizedBox(width: 20.w),
@@ -208,6 +234,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ),
       child: Row(
         children: <Widget>[
+          SizedBox(width: 10.w),
           Text(
             '$text',
             textAlign: TextAlign.center,
@@ -218,7 +245,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               color: Color(0xFF000000),
             ),
           ),
-          SizedBox(width: 10.w),
+          SizedBox(width: 30.w),
           CircleAvatar(
             radius: 30.w,
             backgroundColor: Color(0xFF83D32F),
@@ -228,6 +255,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               color: Colors.white,
             ),
           ),
+          SizedBox(width: 10.w),
         ],
       ),
     );

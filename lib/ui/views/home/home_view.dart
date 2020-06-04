@@ -9,6 +9,8 @@ import 'package:veggie_go_malaysia/ui/views/home/home_viewmodel.dart';
 import 'package:veggie_go_malaysia/ui/views/home/widgets/location_bar.dart';
 import 'package:veggie_go_malaysia/ui/views/home/widgets/restaurant_card.dart';
 
+import 'widgets/flag_selector.dart';
+
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -96,6 +98,7 @@ class _QuickSearch extends StatelessWidget {
     _customIcon(ThemeColors.searchBarIcon, 'Western'),
     _customIcon(ThemeColors.searchBarIcon, 'Indian'),
   ];
+  
   final List<Widget> _quickIconsSecond = [
     _customIcon(ThemeColors.searchBarIcon, 'Korean'),
     _customIcon(ThemeColors.searchBarIcon, 'Thai'),
